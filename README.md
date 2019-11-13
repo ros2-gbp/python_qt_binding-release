@@ -1,3 +1,26 @@
+## python_qt_binding (eloquent) - 1.0.3-1
+
+The packages in the `python_qt_binding` repository were released into the `eloquent` distro by running `/usr/bin/bloom-release -r eloquent -t eloquent python_qt_binding` on `Wed, 13 Nov 2019 01:47:10 -0000`
+
+The `python_qt_binding` package was released.
+
+Version of package(s) in repository `python_qt_binding`:
+
+- upstream repository: git@github.com:ros-visualization/python_qt_binding.git
+- release repository: https://github.com/ros2-gbp/python_qt_binding-release.git
+- rosdistro version: `1.0.2-1`
+- old version: `1.0.2-1`
+- new version: `1.0.3-1`
+
+Versions of tools used:
+
+- bloom version: `0.9.0`
+- catkin_pkg version: `0.4.14`
+- rosdep version: `0.17.1`
+- rosdistro version: `0.7.5`
+- vcstools version: `0.1.42`
+
+
 ## python_qt_binding (eloquent) - 1.0.2-1
 
 The packages in the `python_qt_binding` repository were released into the `eloquent` distro by running `/usr/bin/bloom-release -r eloquent -t eloquent python_qt_binding` on `Mon, 30 Sep 2019 21:38:09 -0000`
