@@ -87,7 +87,7 @@ tracks:
       :{release_inc}
     devel_branch: crystal-devel
     last_version: 1.0.5
-    name: upstream
+    name: python_qt_binding
     patches: null
     release_inc: '1'
     release_repo_url: null
@@ -113,7 +113,7 @@ tracks:
       :{release_inc} --os-name rhel
     devel_branch: main
     last_version: 1.0.7
-    name: upstream
+    name: python_qt_binding
     patches: null
     release_inc: '2'
     release_repo_url: null
@@ -139,7 +139,7 @@ tracks:
       :{release_inc} --os-name rhel
     devel_branch: main
     last_version: 1.0.7
-    name: upstream
+    name: python_qt_binding
     patches: null
     release_inc: '1'
     release_repo_url: null
