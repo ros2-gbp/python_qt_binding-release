@@ -23,8 +23,9 @@ Changes will only be made to [active ROS Distros](https://dlu.github.io/ros_cloc
 The branches on this repo are for different ROS distros.
 
 * `main` - ROS Rolling
+* `galactic_devel` - ROS Galactic
 * `crystal-devel` - ROS Foxy, ROS Eloquent, ROS Dashing, ROS Crystal
 * `melodic-devel` - ROS Noetic, ROS Melodic
 * `kinetic-devel` - ROS Lunar, ROS Kinetic
 * `groovy-devel` - ROS Jade, ROS Indigo, ROS Hydro, ROS Groovy
-* `fuerte-devel` - ROS Electric, ROS Fuerte
+* `fuerte-devel` - ROS Fuerte
