@@ -2,18 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.1.1 (2021-12-06)
+1.0.8 (2021-12-06)
 ------------------
-* Replace PythonInterp to Python3 COMPONENTS (`#108 <https://github.com/ros-visualization/python_qt_binding/issues/108>`_)
-* Use PyQt5 module path to find SIP bindings (`#106 <https://github.com/ros-visualization/python_qt_binding/issues/106>`_)
-* Contributors: Ben Wolsieffer, Homalozoa X
-
-1.1.0 (2021-11-02)
-------------------
-* Make FindPythonInterp dependency explicit (`#107 <https://github.com/ros-visualization/python_qt_binding/issues/107>`_)
-* Add note about galactic branch (`#104 <https://github.com/ros-visualization/python_qt_binding/issues/104>`_)
+* Replace PythonInterp to Python3 COMPONENTS (`#110 <https://github.com/ros-visualization/python_qt_binding/issues/110>`_)
 * fuerte-devel is too new for ROS Electric (`#101 <https://github.com/ros-visualization/python_qt_binding/issues/101>`_)
-* Contributors: Shane Loretz
+* Contributors: Homalozoa X, Shane Loretz
 
 1.0.7 (2021-03-18)
 ------------------
