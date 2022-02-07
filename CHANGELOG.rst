@@ -2,18 +2,6 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.0.8 (2021-12-06)
-------------------
-* Replace PythonInterp to Python3 COMPONENTS (`#110 <https://github.com/ros-visualization/python_qt_binding/issues/110>`_)
-* fuerte-devel is too new for ROS Electric (`#101 <https://github.com/ros-visualization/python_qt_binding/issues/101>`_)
-* Contributors: Homalozoa X, Shane Loretz
-
-1.0.7 (2021-03-18)
-------------------
-* Add repo README
-* Shorten some long lines of CMake (`#99 <https://github.com/ros-visualization/python_qt_binding/issues/99>`_)
-* Contributors: Scott K Logan, Shane Loretz
-
 1.0.6 (2021-01-25)
 ------------------
 * Update maintainers (`#96 <https://github.com/ros-visualization/python_qt_binding/issues/96>`_) (`#98 <https://github.com/ros-visualization/python_qt_binding/issues/98>`_)
