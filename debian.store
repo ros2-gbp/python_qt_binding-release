@@ -1,1 +1,1 @@
-{"base": "a883af6", "parent": "debian/rolling/python_qt_binding", "previous": "097b55e", "trim": "", "trimbase": ""}
+{"base": "fe33002", "parent": "debian/humble/python_qt_binding", "previous": "bc33255", "trim": "", "trimbase": ""}
