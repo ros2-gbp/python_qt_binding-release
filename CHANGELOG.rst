@@ -2,6 +2,9 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.0 (2023-04-28)
+------------------
+
 1.2.3 (2023-04-11)
 ------------------
 * Fix to allow ninja to use make for generators (`#123 <https://github.com/ros-visualization/python_qt_binding/issues/123>`_)
