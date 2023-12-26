@@ -1,9 +1,10 @@
-from copy import copy
-from distutils.spawn import find_executable
+import copy
 import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 
 import PyQt5
 from PyQt5 import QtCore
@@ -15,9 +16,9 @@ libqt5_rename = False
 class Configuration(sipconfig.Configuration):
 
     def __init__(self):
-        env = copy(os.environ)
+        env = copy.copy(os.environ)
         env['QT_SELECT'] = '5'
-        qmake_exe = 'qmake-qt5' if find_executable('qmake-qt5') else 'qmake'
+        qmake_exe = 'qmake-qt5' if shutil.which('qmake-qt5') else 'qmake'
         qtconfig = subprocess.check_output(
             [qmake_exe, '-query'], env=env, universal_newlines=True)
         qtconfig = dict(line.split(':', 1) for line in qtconfig.splitlines())
@@ -43,7 +44,7 @@ class Configuration(sipconfig.Configuration):
         macros = sipconfig._default_macros.copy()
         macros['INCDIR_QT'] = qtconfig['QT_INSTALL_HEADERS']
         macros['LIBDIR_QT'] = qtconfig['QT_INSTALL_LIBS']
-        macros['MOC'] = 'moc-qt5' if find_executable('moc-qt5') else 'moc'
+        macros['MOC'] = 'moc-qt5' if shutil.which('moc-qt5') else 'moc'
         self.set_build_macros(macros)
 
 
@@ -59,25 +60,30 @@ def get_sip_dir_flags(config):
         sip_flags = config.pyqt_sip_flags
         return sip_dir, sip_flags
     except AttributeError:
-        # sipconfig.Configuration does not have a pyqt_sip_dir or pyqt_sip_flags AttributeError
-        sip_flags = QtCore.PYQT_CONFIGURATION['sip_flags']
+        pass
 
-        # Archlinux installs sip files here by default
-        default_sip_dir = os.path.join(PyQt5.__path__[0], 'bindings')
-        if os.path.exists(default_sip_dir):
-            return default_sip_dir, sip_flags
+    # We didn't find the sip_dir and sip_flags from the config, continue looking
 
-        # sip4 installs here by default
-        default_sip_dir = os.path.join(sipconfig._pkg_config['default_sip_dir'], 'PyQt5')
-        if os.path.exists(default_sip_dir):
-            return default_sip_dir, sip_flags
+    # sipconfig.Configuration does not have a pyqt_sip_dir or pyqt_sip_flags AttributeError
+    sip_flags = QtCore.PYQT_CONFIGURATION['sip_flags']
 
-        # Homebrew installs sip files here by default
-        default_sip_dir = os.path.join(sipconfig._pkg_config['default_sip_dir'], 'Qt5')
-        if os.path.exists(default_sip_dir):
-            return default_sip_dir, sip_flags
-        raise FileNotFoundError('The sip directory for PyQt5 could not be located. Please ensure' +
-                                ' that PyQt5 is installed')
+    candidate_sip_dirs = []
+
+    # Archlinux installs sip files here by default
+    candidate_sip_dirs.append(os.path.join(PyQt5.__path__[0], 'bindings'))
+
+    # sip4 installs here by default
+    candidate_sip_dirs.append(os.path.join(sipconfig._pkg_config['default_sip_dir'], 'PyQt5'))
+
+    # Homebrew installs sip files here by default
+    candidate_sip_dirs.append(os.path.join(sipconfig._pkg_config['default_sip_dir'], 'Qt5'))
+
+    for sip_dir in candidate_sip_dirs:
+        if os.path.exists(sip_dir):
+            return sip_dir, sip_flags
+
+    raise FileNotFoundError('The sip directory for PyQt5 could not be located. Please ensure' +
+                            ' that PyQt5 is installed')
 
 
 if len(sys.argv) != 8:
@@ -111,16 +117,43 @@ sip_bin = config.sip_bin
 if sys.platform == 'win32' and os.path.isdir(sip_bin):
     sip_bin += '.exe'
 
-cmd = [
-    sip_bin,
-    '-c', build_dir,
-    '-b', os.path.join(build_dir, build_file),
-    '-I', sip_dir,
-    '-w'
-]
-cmd += sip_flags.split(' ')
-cmd.append(sip_file)
-subprocess.check_call(cmd)
+# SIP4 has an incompatibility with Qt 5.15.6.  In particular, Qt 5.15.6 uses a new SIP directive
+# called py_ssize_t_clean in QtCoremod.sip that SIP4 does not understand.
+#
+# Unfortunately, the combination of SIP4 and Qt 5.15.6 is common.  Archlinux, Ubuntu 22.04
+# and RHEL-9 all have this combination.  On Ubuntu 22.04, there is a custom patch to SIP4
+# to make it understand the py_ssize_t_clean tag, so the combination works.  But on most
+# other platforms, it fails.
+#
+# To workaround this, copy all of the SIP files into a temporary directory, remove the offending
+# line, and then use that temporary directory as the include path.  This is unnecessary on
+# Ubuntu 22.04, but shouldn't hurt anything there.
+with tempfile.TemporaryDirectory() as tmpdirname:
+    shutil.copytree(sip_dir, tmpdirname, dirs_exist_ok=True)
+
+    output = ''
+    with open(os.path.join(tmpdirname, 'QtCore', 'QtCoremod.sip'), 'r') as infp:
+        for line in infp:
+            if line.startswith('%Module(name='):
+                result = re.sub(r', py_ssize_t_clean=True', '', line)
+                output += result
+            else:
+                output += line
+
+    with open(os.path.join(tmpdirname, 'QtCore', 'QtCoremod.sip'), 'w') as outfp:
+        outfp.write(output)
+
+    cmd = [
+        sip_bin,
+        '-c', build_dir,
+        '-b', os.path.join(build_dir, build_file),
+        '-I', tmpdirname,
+        '-w'
+    ]
+    cmd += sip_flags.split(' ')
+    cmd.append(sip_file)
+
+    subprocess.check_call(cmd)
 
 # Create the Makefile.  The QtModuleMakefile class provided by the
 # pyqtconfig module takes care of all the extra preprocessor, compiler and
