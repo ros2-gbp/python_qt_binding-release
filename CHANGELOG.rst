@@ -2,19 +2,10 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.1.0 (2024-01-24)
+1.2.4 (2024-02-07)
 ------------------
-* Switch to FindPython3 in the shiboken_helper.cmake. (`#132 <https://github.com/ros-visualization/python_qt_binding/issues/132>`_)
+* Update the SIP support so we can deal with a broken RHEL-9. (`#130 <https://github.com/ros-visualization/python_qt_binding/issues/130>`_)
 * Contributors: Chris Lalancette
-
-2.0.0 (2023-12-26)
-------------------
-* Cleanup of the sip_configure.py file. (`#131 <https://github.com/ros-visualization/python_qt_binding/issues/131>`_)
-* Update the SIP support so we can deal with a broken RHEL-9. (`#129 <https://github.com/ros-visualization/python_qt_binding/issues/129>`_)
-* Contributors: Chris Lalancette
-
-1.3.0 (2023-04-28)
-------------------
 
 1.2.3 (2023-04-11)
 ------------------
