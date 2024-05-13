@@ -2,13 +2,12 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.3.0 (2024-04-26)
+2.2.1 (2024-05-13)
 ------------------
-* Only suppress Python warnings on new enough CMake (`#139 <https://github.com/ros-visualization/python_qt_binding/issues/139>`_)
-  * Older CMake doesn't have the policy, so skip it there.
-* Suppress warning from Shiboken2. (`#137 <https://github.com/ros-visualization/python_qt_binding/issues/137>`_)
-  The comment has more information on why we are doing this.
-* Contributors: Alejandro Hernández Cordero, Chris Lalancette
+* Suppress warning from Shiboken2. (backport `#137 <https://github.com/ros-visualization/python_qt_binding/issues/137>`_) (`#138 <https://github.com/ros-visualization/python_qt_binding/issues/138>`_)
+  Co-authored-by: Chris Lalancette <clalancette@gmail.com>
+  Co-authored-by: Alejandro Hernández Cordero <ahcorde@gmail.com>
+* Contributors: mergify[bot]
 
 2.2.0 (2024-03-28)
 ------------------
