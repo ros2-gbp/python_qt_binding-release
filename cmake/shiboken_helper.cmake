@@ -1,32 +1,13 @@
-# By default, without the settings below, find_package(Python3) will attempt
-# to find the newest python version it can, and additionally will find the
-# most specific version.  For instance, on a system that has
-# /usr/bin/python3.10, /usr/bin/python3.11, and /usr/bin/python3, it will find
-# /usr/bin/python3.11, even if /usr/bin/python3 points to /usr/bin/python3.10.
-# The behavior we want is to prefer the "system" installed version unless the
-# user specifically tells us othewise through the Python3_EXECUTABLE hint.
-# Setting CMP0094 to NEW means that the search will stop after the first
-# python version is found.  Setting Python3_FIND_UNVERSIONED_NAMES means that
-# the search will prefer /usr/bin/python3 over /usr/bin/python3.11.  And that
-# latter functionality is only available in CMake 3.20 or later, so we need
-# at least that version.
-cmake_minimum_required(VERSION 3.20)
-cmake_policy(SET CMP0094 NEW)
-set(Python3_FIND_UNVERSIONED_NAMES FIRST)
-
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+find_package(PythonInterp "3.3" REQUIRED)
 
 if(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED)
   return()
 endif()
 set(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED TRUE)
 
-# In CMake 3.27 and later, FindPythonInterp and FindPythonLibs are deprecated.
-# However, Shiboken2 as packaged in Ubuntu 24.04 still use them, so set CMP0148 to
-# "OLD" to silence this warning.
-if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.27.0")
-  cmake_policy(SET CMP0148 OLD)
-endif()
+set(PYTHON_SUFFIX ".cpython-${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}m")
+set(PYTHON_EXTENSION_SUFFIX "${PYTHON_SUFFIX}-${CMAKE_CXX_LIBRARY_ARCHITECTURE}")
+
 find_package(Shiboken2 QUIET)
 if(Shiboken2_FOUND)
   message(STATUS "Found Shiboken2 version ${Shiboken2_VERSION}")
@@ -39,6 +20,7 @@ if(Shiboken2_FOUND)
   message(STATUS "Using SHIBOKEN_LIBRARY: ${SHIBOKEN_LIBRARY}")
   message(STATUS "Using SHIBOKEN_BINARY: ${SHIBOKEN_BINARY}")
 endif()
+set(PYTHON_BASENAME "${PYTHON_SUFFIX}-${CMAKE_CXX_LIBRARY_ARCHITECTURE}")
 
 find_package(PySide2 QUIET)
 if(PySide2_FOUND)
@@ -51,9 +33,20 @@ if(PySide2_FOUND)
   message(STATUS "Using PYSIDE_LIBRARY: ${PYSIDE_LIBRARY}")
 endif()
 
-if(Shiboken2_FOUND AND PySide2_FOUND)
-  message(STATUS "Shiboken binding generator available.")
-  set(shiboken_helper_FOUND TRUE)
+set(Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+find_package(PythonLibs "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+
+if(Shiboken2_FOUND AND PySide2_FOUND AND PYTHONLIBS_FOUND)
+  if(${CMAKE_VERSION} VERSION_LESS "3.14")
+    # the shiboken invocation needs CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
+    # which is broken before CMake 3.14
+    # see https://gitlab.kitware.com/cmake/cmake/issues/18394
+    message(STATUS "Shiboken binding generator available but CMake version is older than 3.14.")
+    set(shiboken_helper_NOTFOUND TRUE)
+  else()
+    message(STATUS "Shiboken binding generator available.")
+    set(shiboken_helper_FOUND TRUE)
+  endif()
 else()
   message(STATUS "Shiboken binding generator NOT available.")
   set(shiboken_helper_NOTFOUND TRUE)
@@ -76,7 +69,6 @@ macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
   set(${VAR} ${SHIBOKEN_BINARY}
     --generatorSet=shiboken
     --enable-pyside-extensions
-    -std=c++17
     --include-paths=${INCLUDE_PATH_WITH_COLONS}${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS}
     --typesystem-paths=${PYSIDE_TYPESYSTEMS}
     --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
@@ -105,14 +97,14 @@ endmacro()
 # :type BUILD_DIR: string
 #
 function(shiboken_generator PROJECT_NAME GLOBAL TYPESYSTEM WORKING_DIR GENERATED_SRCS HDRS INCLUDE_PATH BUILD_DIR)
-  _shiboken_generator_command(COMMAND "${GLOBAL}" "${TYPESYSTEM}" "${INCLUDE_PATH}" "${BUILD_DIR}")
-  add_custom_command(
-    OUTPUT ${GENERATED_SRCS}
-    COMMAND ${COMMAND}
-    DEPENDS ${GLOBAL} ${TYPESYSTEM} ${HDRS}
-    WORKING_DIRECTORY ${WORKING_DIR}
-    COMMENT "Running Shiboken generator for ${PROJECT_NAME} Python bindings..."
-  )
+    _shiboken_generator_command(COMMAND "${GLOBAL}" "${TYPESYSTEM}" "${INCLUDE_PATH}" "${BUILD_DIR}")
+    add_custom_command(
+        OUTPUT ${GENERATED_SRCS}
+        COMMAND ${COMMAND}
+      DEPENDS ${GLOBAL} ${TYPESYSTEM} ${HDRS}
+      WORKING_DIRECTORY ${WORKING_DIR}
+      COMMENT "Running Shiboken generator for ${PROJECT_NAME} Python bindings..."
+    )
 endfunction()
 
 
@@ -125,19 +117,19 @@ endfunction()
 # :type QT_COMPONENTS: list of strings
 #
 function(shiboken_include_directories PROJECT_NAME QT_COMPONENTS)
-  set(shiboken_INCLUDE_DIRECTORIES
-    ${Python3_INCLUDE_DIRS}
-    ${SHIBOKEN_INCLUDE_DIR}
-    ${PYSIDE_INCLUDE_DIR}
-    ${PYSIDE_INCLUDE_DIR}/QtCore
-    ${PYSIDE_INCLUDE_DIR}/QtGui
-  )
+    set(shiboken_INCLUDE_DIRECTORIES
+        ${PYTHON_INCLUDE_DIR}
+        ${SHIBOKEN_INCLUDE_DIR}
+        ${PYSIDE_INCLUDE_DIR}
+        ${PYSIDE_INCLUDE_DIR}/QtCore
+        ${PYSIDE_INCLUDE_DIR}/QtGui
+    )
 
-  foreach(component ${QT_COMPONENTS})
-    set(shiboken_INCLUDE_DIRECTORIES ${shiboken_INCLUDE_DIRECTORIES} ${PYSIDE_INCLUDE_DIR}/${component})
-  endforeach()
+    foreach(component ${QT_COMPONENTS})
+        set(shiboken_INCLUDE_DIRECTORIES ${shiboken_INCLUDE_DIRECTORIES} ${PYSIDE_INCLUDE_DIR}/${component})
+    endforeach()
 
-  include_directories(${PROJECT_NAME} ${shiboken_INCLUDE_DIRECTORIES})
+    include_directories(${PROJECT_NAME} ${shiboken_INCLUDE_DIRECTORIES})
 endfunction()
 
 
@@ -150,16 +142,16 @@ endfunction()
 # :type QT_COMPONENTS: list of strings
 #
 function(shiboken_target_link_libraries PROJECT_NAME QT_COMPONENTS)
-  set(shiboken_LINK_LIBRARIES
-    ${SHIBOKEN_PYTHON_LIBRARIES}
-    ${SHIBOKEN_LIBRARY}
-    ${PYSIDE_LIBRARY}
-  )
+    set(shiboken_LINK_LIBRARIES
+        ${SHIBOKEN_PYTHON_LIBRARIES}
+        ${SHIBOKEN_LIBRARY}
+        ${PYSIDE_LIBRARY}
+    )
 
-  foreach(component ${QT_COMPONENTS})
-    string(TOUPPER ${component} component)
-    set(shiboken_LINK_LIBRARIES ${shiboken_LINK_LIBRARIES} ${QT_${component}_LIBRARY})
-  endforeach()
+    foreach(component ${QT_COMPONENTS})
+        string(TOUPPER ${component} component)
+        set(shiboken_LINK_LIBRARIES ${shiboken_LINK_LIBRARIES} ${QT_${component}_LIBRARY})
+    endforeach()
 
-  target_link_libraries(${PROJECT_NAME} ${shiboken_LINK_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} ${shiboken_LINK_LIBRARIES})
 endfunction()

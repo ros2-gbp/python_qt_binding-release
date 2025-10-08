@@ -37,7 +37,6 @@ except ImportError:
     # this must not be checked second
     import builtins
 import os
-import platform
 import sys
 import traceback
 
@@ -51,11 +50,7 @@ def _select_qt_binding(binding_name=None, binding_order=None):
     global QT_BINDING, QT_BINDING_VERSION
 
     # order of default bindings can be changed here
-    if platform.system() == 'Darwin':
-        DEFAULT_BINDING_ORDER = ['pyside']
-    else:
-        DEFAULT_BINDING_ORDER = ['pyqt', 'pyside']
-
+    DEFAULT_BINDING_ORDER = ['pyqt', 'pyside']
     binding_order = binding_order or DEFAULT_BINDING_ORDER
 
     # determine binding preference
@@ -134,7 +129,7 @@ def _register_binding_module(module_name, module):
 
 def _named_import(name):
     parts = name.split('.')
-    assert len(parts) >= 2
+    assert(len(parts) >= 2)
     module = builtins.__import__(name)
     for m in parts[1:]:
         module = module.__dict__[m]

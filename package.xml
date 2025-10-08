@@ -1,6 +1,6 @@
 <package format="2">
   <name>python_qt_binding</name>
-  <version>2.2.2</version>
+  <version>1.1.3</version>
   <description>
     This stack provides Python bindings for Qt.
     There are two providers: pyside and pyqt.  PySide2 is available under
@@ -14,16 +14,13 @@
     independent of which binding provider was actually used which makes
     it very easy to switch between these.
   </description>
-
   <maintainer email="sloretz@openrobotics.org">Shane Loretz</maintainer>
-
   <license>BSD</license>
 
   <url>http://ros.org/wiki/python_qt_binding</url>
-
   <author>Dave Hershberger</author>
-  <author>Dirk Thomas</author>
   <author>Dorian Scholz</author>
+  <author>Dirk Thomas</author>
   <author>Stephen Brawner</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
