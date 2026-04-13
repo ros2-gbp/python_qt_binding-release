@@ -2,15 +2,80 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.1.3 (2025-10-08)
+2.5.0 (2026-04-13)
 ------------------
-* fix setuptools deprecation (`#151 <https://github.com/ros-visualization/python_qt_binding/issues/151>`_) (`#155 <https://github.com/ros-visualization/python_qt_binding/issues/155>`_)
-* Contributors: mergify[bot]
+* Use sip-build and python3_add_library for Qt5/Qt6 (`#157 <https://github.com/ros-visualization/python_qt_binding/issues/157>`_)
+* Contributors: Shane Loretz, Alejandro Hernández Cordero
 
-1.1.2 (2023-11-13)
+2.4.1 (2025-10-08)
 ------------------
-* Fix to allow ninja to use make for generators (`#123 <https://github.com/ros-visualization/python_qt_binding/issues/123>`_) (`#128 <https://github.com/ros-visualization/python_qt_binding/issues/128>`_)
-* Contributors: Yasushi SHOJI
+* fix setuptools deprecation (`#151 <https://github.com/ros-visualization/python_qt_binding/issues/151>`_)
+* fix cmake deprecation (`#150 <https://github.com/ros-visualization/python_qt_binding/issues/150>`_)
+* Contributors: mosfet80
+
+2.4.0 (2025-04-28)
+------------------
+* Remove the mirror-rolling-to-main workflow (`#145 <https://github.com/ros-visualization/python_qt_binding/issues/145>`_)
+* Remove CODEOWNERS (`#144 <https://github.com/ros-visualization/python_qt_binding/issues/144>`_)
+* Contributors: Alejandro Hernández Cordero, Chris Lalancette
+
+2.3.1 (2024-06-25)
+------------------
+* Skip running the tests on Windows Debug. (`#142 <https://github.com/ros-visualization/python_qt_binding/issues/142>`_)
+* Contributors: Chris Lalancette
+
+2.3.0 (2024-04-26)
+------------------
+* Only suppress Python warnings on new enough CMake (`#139 <https://github.com/ros-visualization/python_qt_binding/issues/139>`_)
+  * Older CMake doesn't have the policy, so skip it there.
+* Suppress warning from Shiboken2. (`#137 <https://github.com/ros-visualization/python_qt_binding/issues/137>`_)
+  The comment has more information on why we are doing this.
+* Contributors: Alejandro Hernández Cordero, Chris Lalancette
+
+2.2.0 (2024-03-28)
+------------------
+* Switch to C++17 for SIP and Shiboken (`#135 <https://github.com/ros-visualization/python_qt_binding/issues/135>`_)
+* Set hints to find the python version we actually want. (`#134 <https://github.com/ros-visualization/python_qt_binding/issues/134>`_)
+* Contributors: Chris Lalancette, Christophe Bedard
+
+2.1.1 (2024-02-07)
+------------------
+* Remove unnecessary parentheses around assert. (`#133 <https://github.com/ros-visualization/python_qt_binding/issues/133>`_)
+* Contributors: Chris Lalancette
+
+2.1.0 (2024-01-24)
+------------------
+* Switch to FindPython3 in the shiboken_helper.cmake. (`#132 <https://github.com/ros-visualization/python_qt_binding/issues/132>`_)
+* Contributors: Chris Lalancette
+
+2.0.0 (2023-12-26)
+------------------
+* Cleanup of the sip_configure.py file. (`#131 <https://github.com/ros-visualization/python_qt_binding/issues/131>`_)
+* Update the SIP support so we can deal with a broken RHEL-9. (`#129 <https://github.com/ros-visualization/python_qt_binding/issues/129>`_)
+* Contributors: Chris Lalancette
+
+1.3.0 (2023-04-28)
+------------------
+
+1.2.3 (2023-04-11)
+------------------
+* Fix to allow ninja to use make for generators (`#123 <https://github.com/ros-visualization/python_qt_binding/issues/123>`_)
+* Fix flake8 linter regression (`#125 <https://github.com/ros-visualization/python_qt_binding/issues/125>`_)
+* Remove pyqt from default binding order for macOS (`#118 <https://github.com/ros-visualization/python_qt_binding/issues/118>`_)
+* Contributors: Christoph Hellmann Santos, Cristóbal Arroyo, Michael Carroll, Rhys Mainwaring
+
+1.2.2 (2023-02-24)
+------------------
+* Demote missing SIP message from WARNING to STATUS (`#122 <https://github.com/ros-visualization/python_qt_binding/issues/122>`_)
+* Contributors: Scott K Logan
+
+1.2.1 (2023-02-14)
+------------------
+* [rolling] Update maintainers - 2022-11-07 (`#120 <https://github.com/ros-visualization/python_qt_binding/issues/120>`_)
+* Contributors: Audrow Nash
+
+1.2.0 (2022-05-10)
+------------------
 
 1.1.1 (2021-12-06)
 ------------------
