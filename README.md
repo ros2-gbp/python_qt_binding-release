@@ -1,3 +1,26 @@
+## python_qt_binding (rolling) - 2.6.0-1
+
+The packages in the `python_qt_binding` repository were released into the `rolling` distro by running `/usr/bin/bloom-release --track rolling --rosdistro rolling python_qt_binding` on `Wed, 06 May 2026 19:00:13 -0000`
+
+The `python_qt_binding` package was released.
+
+Version of package(s) in repository `python_qt_binding`:
+
+- upstream repository: https://github.com/ros-visualization/python_qt_binding.git
+- release repository: https://github.com/ros2-gbp/python_qt_binding-release.git
+- rosdistro version: `2.5.4-2`
+- old version: `2.5.4-2`
+- new version: `2.6.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.14.3`
+- catkin_pkg version: `1.1.0`
+- rosdep version: `0.26.0`
+- rosdistro version: `1.0.1`
+- vcstools version: `0.1.42`
+
+
 ## python_qt_binding (rolling) - 2.5.4-1
 
 The packages in the `python_qt_binding` repository were released into the `rolling` distro by running `/usr/local/google/home/sloretz/projects/lyrical/env3/bin/bloom-release python_qt_binding -r rolling -t rolling` on `Tue, 28 Apr 2026 03:27:54 -0000`
