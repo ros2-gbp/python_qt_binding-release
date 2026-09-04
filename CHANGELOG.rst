@@ -2,10 +2,18 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.5.5 (2026-07-14)
+2.6.2 (2026-09-04)
 ------------------
-* Removed Python2 references (`#163 <https://github.com/ros-visualization/python_qt_binding/issues/163>`_) (`#164 <https://github.com/ros-visualization/python_qt_binding/issues/164>`_)
-* Contributors: mergify[bot]
+* Removed Qt5 support (`#165 <https://github.com/ros-visualization/python_qt_binding/issues/165>`_)
+* Contributors: Alejandro Hernández Cordero
+
+2.6.1 (2026-07-14)
+------------------
+* Removed Python2 references (`#163 <https://github.com/ros-visualization/python_qt_binding/issues/163>`_)
+* Contributors: Alejandro Hernández Cordero
+
+2.6.0 (2026-05-06)
+------------------
 
 2.5.4 (2026-04-28)
 ------------------
